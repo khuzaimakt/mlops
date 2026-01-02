@@ -1,0 +1,32 @@
+project_name: feature-store-churn-poc
+region: us-west-2
+
+# S3 bucket/prefix used for Athena and Feature Store offline store
+bucket: mlbucket-sagemaker
+prefix: mlops/feature_store_poc
+
+# IAM Role - should have SageMaker, S3, Athena, Glue, and Feature Store permissions
+role_arn: arn:aws:iam::221490242148:role/ML-Role-Pipelines
+
+# Athena settings for raw "messy" churn data
+athena_database: ml_metrics
+athena_table: churn_prediction_data
+athena_query_results: s3://mlbucket-sagemaker/athena-query-results/
+
+# SageMaker Feature Store
+feature_group_name: mlops_poc_churn_classification_feature
+record_identifier_name: customer_id
+event_time_feature_name: event_time
+offline_store_s3_uri: s3://mlbucket-sagemaker/mlops/feature_store_poc/offline_store/
+online_store_enabled: false
+
+# Processing instance type
+processing_instance_type: ml.m5.xlarge
+
+# Pipeline name
+pipeline_name: feature-store-ingestion-pipeline
+
+# Failure notification settings
+sns_topic_arn: arn:aws:sns:us-west-2:221490242148:ml-model-pipeline-failures
+notification_email: khuzaima@revcloud.com
+

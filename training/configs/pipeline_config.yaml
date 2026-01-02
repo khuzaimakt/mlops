@@ -1,0 +1,42 @@
+project_name: classification-model-mlops
+region: us-west-2
+bucket: mlbucket-sagemaker
+prefix: mlops/classification_model
+pipeline_name: classification-model-pipeline
+model_package_group: classification-model-group
+
+# IAM Role - should have SageMaker, S3 permissions
+role_arn: arn:aws:iam::221490242148:role/ML-Role-Pipelines
+
+# Instance types
+training_instance_type: ml.m5.xlarge
+processing_instance_type: ml.m5.xlarge
+inference_instance_type: ml.m5.xlarge #use ml.t3.medium for lower cost but not suppot autoscaling
+
+# Model Registry settings
+accuracy_threshold: 0.5  # Minimum accuracy to register model
+approval_status: Approved  # Auto-approve models that meet threshold
+
+# Deployment settings
+endpoint_name: classification-model-endpoint  # SageMaker endpoint name
+enable_autoscaling: true  # Enable autoscaling for the endpoint
+autoscaling_min_capacity: 1  # Minimum number of instances
+autoscaling_max_capacity: 5  # Maximum number of instances
+
+# Failure notification settings
+sns_topic_arn: arn:aws:sns:us-west-2:221490242148:ml-model-pipeline-failures
+notification_email: khuzaima@revcloud.com
+
+# Feature Store settings (replaces Athena table)
+feature_group_name: mlops_poc_churn_classification_feature
+customer_id_start: 1  # Training data: customer_id 1-4000
+customer_id_end: 4000
+athena_query_results: s3://mlbucket-sagemaker/athena-query-results/
+
+# Training hyperparameters (RandomForest Classifier)
+hyperparameters:
+  n_estimators: 100
+  max_depth: 10
+  min_samples_split: 2
+  min_samples_leaf: 1
+

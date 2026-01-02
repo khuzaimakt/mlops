@@ -1,0 +1,37 @@
+project_name: classification-model-automl
+region: us-west-2
+bucket: mlbucket-sagemaker
+prefix: mlops/automl_training
+pipeline_name: classification-model-automl-pipeline
+model_package_group: classification-model-automl-group
+
+# IAM Role - should have SageMaker, S3, Athena permissions
+role_arn: arn:aws:iam::221490242148:role/ML-Role-Pipelines
+
+# Instance types
+processing_instance_type: ml.m5.xlarge
+
+# Inference/endpoint settings
+endpoint_name: automl-classification-endpoint
+inference_instance_type: ml.m5.xlarge #use ml.t3.medium for lower cost but not suppot autoscaling
+enable_autoscaling: true
+autoscaling_min_capacity: 1
+autoscaling_max_capacity: 5
+
+# AutoML settings
+target_attribute_name: churn
+problem_type: BinaryClassification
+max_runtime_sec: 3600
+accuracy_threshold: 0.5
+objective_metric_name: Accuracy
+
+# Feature Store settings (replaces Athena table)
+feature_group_name: mlops_poc_churn_classification_feature
+customer_id_start: 1  # Training data: customer_id 1-4000
+customer_id_end: 4000
+athena_query_results: s3://mlbucket-sagemaker/athena-query-results/
+
+# Failure notification settings
+sns_topic_arn: arn:aws:sns:us-west-2:221490242148:ml-model-pipeline-failures
+notification_email: khuzaima@revcloud.com
+

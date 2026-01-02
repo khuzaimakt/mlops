@@ -1,0 +1,8 @@
+boto3
+sagemaker
+pandas
+numpy
+pyyaml
+pyarrow
+
+

@@ -1,0 +1,30 @@
+project_name: classification-model-batch-inference
+region: us-west-2
+bucket: mlbucket-sagemaker
+prefix: mlops/batch_inference
+pipeline_name: classification-model-batch-inference-pipeline
+model_package_group: classification-model-group
+
+# IAM Role - should have SageMaker, S3, Athena permissions
+role_arn: arn:aws:iam::221490242148:role/ML-Role-Pipelines
+
+# Instance types (processing only for batch inference)
+processing_instance_type: ml.m5.xlarge
+
+# Feature Store settings (replaces Athena input table)
+feature_group_name: mlops_poc_churn_classification_feature
+customer_id_start: 4000  # Inference data: customer_id 4000-5000
+customer_id_end: 5000
+athena_query_results: s3://mlbucket-sagemaker/athena-query-results/
+
+# Athena settings (for output table only)
+athena_database: ml_metrics
+athena_output_table: mlops_poc_daily_inference
+
+# Failure notification settings
+sns_topic_arn: arn:aws:sns:us-west-2:221490242148:ml-model-pipeline-failures
+notification_email: khuzaima@revcloud.com
+
+# Deployment settings (model source)
+model_approval_status: Approved  # Latest approved model will be used for inference
+
